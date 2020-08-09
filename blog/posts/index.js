@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { randomBytes } = require('crypto');
 const cors = require('cors');
+const axios = require('axios');
 
 const app = express();
 
@@ -20,8 +21,15 @@ app.post('/posts', (req, res) => {
 
   posts[id] = { title, id };
 
+  axios.post('http://localhost:4005/events', {
+    type: 'PostCreated',
+    data: { id, title },
+  });
+
   res.status(201).send(posts[id]);
 });
+
+// app.post('/event');
 
 app.listen(4000, () => {
   console.log(`Server Posts started on port 4000`);
