@@ -21,15 +21,22 @@ app.post('/posts', (req, res) => {
 
   posts[id] = { title, id };
 
-  axios.post('http://localhost:4005/events', {
-    type: 'PostCreated',
-    data: { id, title },
-  });
+  try {
+    axios.post('http://localhost:4005/events', {
+      type: 'PostCreated',
+      data: { id, title },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 
   res.status(201).send(posts[id]);
 });
 
-// app.post('/event');
+app.post('/events', (req, res) => {
+  console.log(`Received Events ${req.body.type}`);
+  res.send({});
+});
 
 app.listen(4000, () => {
   console.log(`Server Posts started on port 4000`);
